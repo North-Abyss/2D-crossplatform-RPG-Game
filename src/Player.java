@@ -144,7 +144,7 @@ public class Player {
         int playerHitboxSize = 48; // The size of the player's hitbox (48x48)
 
 // Update player hitbox
-        hitboxData.update(x, y, x, x + playerHitboxSize, y, y + playerHitboxSize);
+        hitboxData.update( x, x + playerHitboxSize, y, y + playerHitboxSize);
 
 // Check for collisions
         boolean canMove = tileSetting.isCollidable(position, hitboxData);
