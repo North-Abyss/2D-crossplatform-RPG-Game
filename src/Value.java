@@ -26,8 +26,12 @@ public class Value {
 
     static String backgroundLayerPath = "Map/layer1.txt";
     static String collisionLayerPath = "Map/layer2.txt";
-    static int[] anitile ={12};
 
+    // Resource strings for image paths
+    static final String BACKGROUND_IMAGE_PATH = "/Menu/bgmainmenu.jpg";
+    static final String BUTTON_IMAGE_PATH = "/Menu/Button.png";
+
+    static int[] anitile ={12};
     public static int waterID =12;
 
 }

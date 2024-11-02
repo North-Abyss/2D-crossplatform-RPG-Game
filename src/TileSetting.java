@@ -249,4 +249,5 @@ public class TileSetting {
         if(n==0) return collidableTiles.length;
         else return collidableTiles[0].length;
     }
+
 }
