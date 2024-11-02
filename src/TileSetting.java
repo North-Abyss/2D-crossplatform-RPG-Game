@@ -176,13 +176,13 @@ public class TileSetting {
         return booleanArray;
     }
 
-    public boolean isCollidable(int[] position, HitboxData hitboxData) {
+    public boolean isCollidable(int[] position, byte pd, HitboxData hitboxData) {
         int x = position[0];
         int y = position[1];
-        int playerSize = 48;  // Assuming player is still 48x48
-        int tileSize = TILE_SIZE; // The size of your tiles (adjust accordingly if needed)
+        int playerSize = 48;  // Assuming player is 48x48
+        int tileSize = TILE_SIZE; // Tile size in your game
 
-        // Update hitboxData based on the current position
+        // Update player hitbox position based on the player's current coordinates
         hitboxData.update(x + playerSize / 4, x + (3 * playerSize / 4),
                 y + playerSize / 4, y + (3 * playerSize / 4));
 
@@ -191,63 +191,58 @@ public class TileSetting {
             return false; // Collision with screen boundary
         }
 
-        boolean verticalCollision = false;
-        boolean horizontalCollision = false;
+        boolean collisionDetected = false;
 
-        // Check tiles around the player's new position
-        int tileXStart = Math.max(0, (hitboxData.hitboxLeft / tileSize) - 1);
-        int tileXEnd = Math.min(collidableTiles[0].length - 1, (hitboxData.hitboxRight / tileSize) + 1);
-        int tileYStart = Math.max(0, (hitboxData.hitboxTop / tileSize) - 1);
-        int tileYEnd = Math.min(collidableTiles.length - 1, (hitboxData.hitboxBottom / tileSize) + 1);
+        // Calculate tile ranges to check based on hitbox, adjusted for camera offset
+        int tileXStart = Math.max(0, (hitboxData.hitboxLeft + camX) / tileSize);
+        int tileXEnd = Math.min(collidableTiles[0].length - 1, (hitboxData.hitboxRight + camX) / tileSize);
+        int tileYStart = Math.max(0, (hitboxData.hitboxTop + camY) / tileSize);
+        int tileYEnd = Math.min(collidableTiles.length - 1, (hitboxData.hitboxBottom + camY) / tileSize);
 
+        // Iterate over the nearby tiles
         for (int tileY = tileYStart; tileY <= tileYEnd; tileY++) {
             for (int tileX = tileXStart; tileX <= tileXEnd; tileX++) {
                 if (collidableTiles[tileY][tileX]) {
-                    // Get the tile's pixel coordinates
+                    // Get the tile's pixel coordinates in the game world, adjusted by camera
                     int tilePixelX = tileX * tileSize - camX;
                     int tilePixelY = tileY * tileSize - camY;
 
-                    // Define the hitbox for the tile (32x32)
-                    int tileHitboxRight = tilePixelX + 32; // Adjusted for tile hitbox size
-                    int tileHitboxBottom = tilePixelY + 32; // Adjusted for tile hitbox size
+                    // Update the hitbox for the current tile
+                    hitboxData.updatetiles(tilePixelX, tilePixelY, tileSize);
 
-                    // Check for collisions with the tile hitbox
-                    if (hitboxData.hitboxRight > tilePixelX && hitboxData.hitboxLeft < tileHitboxRight &&
+                    // Define tile hitbox boundaries
+                    int tileHitboxRight = tilePixelX + tileSize;
+                    int tileHitboxBottom = tilePixelY + tileSize;
+
+                    // Check for collision based on movement direction
+                    if (pd == 1 && hitboxData.hitboxTop < tileHitboxBottom && hitboxData.hitboxBottom > tilePixelY &&
+                            hitboxData.hitboxRight > tilePixelX && hitboxData.hitboxLeft < tileHitboxRight) {
+                        collisionDetected = true;
+                        y = tileHitboxBottom; // Push player below the tile
+                    } else if (pd == 2 && hitboxData.hitboxBottom > tilePixelY && hitboxData.hitboxTop < tileHitboxBottom &&
+                            hitboxData.hitboxRight > tilePixelX && hitboxData.hitboxLeft < tileHitboxRight) {
+                        collisionDetected = true;
+                        y = tilePixelY - playerSize; // Push player above the tile
+                    } else if (pd == 3 && hitboxData.hitboxLeft < tileHitboxRight && hitboxData.hitboxRight > tilePixelX &&
                             hitboxData.hitboxBottom > tilePixelY && hitboxData.hitboxTop < tileHitboxBottom) {
-
-                        // Determine the direction of the collision
-                        // Check vertical collision
-                        if (hitboxData.hitboxBottom > tilePixelY && hitboxData.hitboxTop < tilePixelY) {
-                            // Moving down
-                            verticalCollision = true; // Block vertical movement
-                            y = tilePixelY - playerSize; // Push player above the tile
-                        } else if (hitboxData.hitboxTop < tileHitboxBottom && hitboxData.hitboxBottom > tileHitboxBottom) {
-                            // Moving up
-                            verticalCollision = true; // Block vertical movement
-                            y = tileHitboxBottom; // Push player below the tile
-                        }
-
-                        // Check horizontal collision
-                        if (hitboxData.hitboxRight > tilePixelX && hitboxData.hitboxLeft < tilePixelX) {
-                            // Moving right
-                            horizontalCollision = true; // Block horizontal movement
-                            x = tilePixelX - playerSize; // Push player to the left of the tile
-                        } else if (hitboxData.hitboxLeft < tileHitboxRight && hitboxData.hitboxRight > tileHitboxRight) {
-                            // Moving left
-                            horizontalCollision = true; // Block horizontal movement
-                            x = tileHitboxRight; // Push player to the right of the tile
-                        }
+                        collisionDetected = true;
+                        x = tileHitboxRight; // Push player to the right of the tile
+                    } else if (pd == 4 && hitboxData.hitboxRight > tilePixelX && hitboxData.hitboxLeft < tileHitboxRight &&
+                            hitboxData.hitboxBottom > tilePixelY && hitboxData.hitboxTop < tileHitboxBottom) {
+                        collisionDetected = true;
+                        x = tilePixelX - playerSize; // Push player to the left of the tile
                     }
                 }
             }
         }
 
-        // Update player's position based on resolved collisions
-        position[0] = x;
-        position[1] = y;
+        // Update player position only if no collision
+        if (!collisionDetected) {
+            position[0] = x;
+            position[1] = y;
+        }
 
-        // Allow movement only if there was no collision in the respective direction
-        return !(verticalCollision || horizontalCollision);
+        return !collisionDetected;
     }
 
     public int collisionmap(int n) {

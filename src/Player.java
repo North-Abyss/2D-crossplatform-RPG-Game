@@ -117,6 +117,8 @@ public class Player {
         }
     }
 
+    byte pd = 0;
+
     public void handleKeyPress(int keyCode) {
         int moveAmount = isRunning ? RUN_SPEED : WALK_SPEED;
 
@@ -132,24 +134,29 @@ public class Player {
         if (newUpPressed == newDownPressed) newUpPressed = newDownPressed = false;
         if (newLeftPressed == newRightPressed) newLeftPressed = newRightPressed = false;
 
-        if (newUpPressed)    {  y -= moveAmount; }
-        if (newDownPressed)  {  y += moveAmount; }
-        if (newLeftPressed)  {  x -= moveAmount; }
-        if (newRightPressed) {  x += moveAmount; }
+        // Temporary position variables for collision and boundary checking
+        int newX = x;
+        int newY = y;
 
-// Prepare the position array [x, y]
-        int[] position = { x, y };
+        // Update temporary position based on key presses
+        if (newUpPressed)    { newY -= moveAmount; pd = 1; }
+        if (newDownPressed)  { newY += moveAmount; pd = 2; }
+        if (newLeftPressed)  { newX -= moveAmount; pd = 3; }
+        if (newRightPressed) { newX += moveAmount; pd = 4; }
 
-// Use the normal hitbox size for the player
+        // Prepare the position array [newX, newY]
+        int[] position = { newX, newY };
+
+        // Use the normal hitbox size for the player
         int playerHitboxSize = 48; // The size of the player's hitbox (48x48)
 
-// Update player hitbox
-        hitboxData.update( x, x + playerHitboxSize, y, y + playerHitboxSize);
+        // Update player hitbox based on temporary position
+        hitboxData.update(newX, newX + playerHitboxSize, newY, newY + playerHitboxSize);
 
-// Check for collisions
-        boolean canMove = tileSetting.isCollidable(position, hitboxData);
+        // Check for collisions
+        boolean canMove = tileSetting.isCollidable(position, pd, hitboxData);
         if (canMove) {
-            // If there is no collision, the new position has already been updated inside isCollidable
+            // If there is no collision, update the actual player position
             x = position[0];
             y = position[1];
         }

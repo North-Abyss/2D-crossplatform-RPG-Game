@@ -21,13 +21,4 @@ public class HitboxData {
         this.tilePixelY = tpy ;
         this.tilehitsize = thbs;
     }
-    public void drawHitbox(Graphics g) {
-        g.setColor(new Color(0, 0, 0, 100)); // Black semi-transparent overlay
-        g.fillRect(hitboxLeft, hitboxTop, hitboxRight - hitboxLeft, hitboxBottom - hitboxTop);
-    }
-
-    public void drawTileHitbox(Graphics g) {
-        g.setColor(new Color(255, 0, 0, 100)); // Red semi-transparent hitbox
-        g.fillRect(tilePixelX, tilePixelY, tilehitsize, tilehitsize);
-    }
 }
