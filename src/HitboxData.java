@@ -1,12 +1,10 @@
 
 public class HitboxData {
-    public int hitboxLeft;
-    public int hitboxRight;
-    public int hitboxTop;
-    public int hitboxBottom;
 
-    public int tilePixelX ;
-    public int tilePixelY ;
+    public int hitboxLeft;  public int hitboxRight;
+    public int hitboxTop;   public int hitboxBottom;
+
+    public int tilePixelX;  public int tilePixelY ;
     public int tilehitsize ;
 
     public void update(int left, int right, int top, int bottom) {
