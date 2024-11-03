@@ -8,11 +8,11 @@ import java.io.IOException;
 import java.net.URL;
 
 public class MainMenu extends JFrame {
-    private static final int BUTTON_WIDTH = 200; // Button width
-    private static final int BUTTON_HEIGHT = 70; // Button height
+    private static final int BUTTON_WIDTH = 240; // Button width
+    private static final int BUTTON_HEIGHT = 80; // Button height
 
     public MainMenu() {
-        setTitle("Game Main Menu");
+        setTitle(Value.GameName);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false); // Prevent resizing
 
@@ -33,11 +33,11 @@ public class MainMenu extends JFrame {
 
         // Calculate button positions for the bottom half of the screen
         int panelHeight = getHeight();
-        int buttonY1 = (int) (panelHeight * 0.4); // Position the first row of buttons (40% down)
-        int buttonY2 = (int) (panelHeight * 0.55); // Position the second row of buttons (55% down)
+        int buttonY1 = (int) (panelHeight * 0.55); // Position the first row of buttons (40% down)
+        int buttonY2 = (int) (panelHeight * 0.70); // Position the second row of buttons (55% down)
 
         // Set button bounds for a 2x2 layout in the bottom half
-        int buttonX = (getWidth() - BUTTON_WIDTH) / 2; // Center X position
+        int buttonX = (getWidth()/2) ; // Center X position
         singlePlayerButton.setBounds(buttonX - BUTTON_WIDTH - 10, buttonY1, BUTTON_WIDTH, BUTTON_HEIGHT); // Left
         multiplayerButton.setBounds(buttonX + 10, buttonY1, BUTTON_WIDTH, BUTTON_HEIGHT); // Right
         settingsButton.setBounds(buttonX - BUTTON_WIDTH - 10, buttonY2, BUTTON_WIDTH, BUTTON_HEIGHT); // Left
@@ -130,7 +130,7 @@ public class MainMenu extends JFrame {
         System.out.println("Starting Single Player Game...");
         dispose(); // Close the main menu
         try {
-            JFrame frame = new JFrame("Abyss");
+            JFrame frame = new JFrame(Value.GameName);
             GamePanel gamePanel = new GamePanel();
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.setResizable(false); // Prevent resizing
@@ -148,7 +148,7 @@ public class MainMenu extends JFrame {
     private void startMultiplayer() {
         System.out.println("Connecting to Multiplayer...");
         dispose();
-        new GameClient("your_server_ip", 12345);  // Connect to the server
+        new GameClient("45.76.193.42", 12345);  // Connect to the server
     }
 
     private void showSettings() {
@@ -156,7 +156,7 @@ public class MainMenu extends JFrame {
         // This can be implemented as a new settings window or dialog
     }
 
-    public static void main(String[] args) {
+    public static void main() {
         SwingUtilities.invokeLater(() -> {
             MainMenu menu = new MainMenu();
             menu.setVisible(true);
@@ -179,7 +179,7 @@ public class MainMenu extends JFrame {
             }
 
             // Draw game name "Abyss" with an outline
-            drawOutlinedText(g, "Abyss", getWidth() / 3, getHeight() / 8, new Font("Arial", Font.BOLD, 72), Color.WHITE, Color.BLACK);
+            drawOutlinedText(g, Value.GameName, (getWidth() / 2)-(Value.GameName.length()/2)*36, getHeight() / 8, new Font("Arial", Font.BOLD, 72), Color.WHITE, Color.BLACK);
         }
 
         private void drawOutlinedText(Graphics g, String text, int x, int y, Font font, Color outlineColor, Color textColor) {

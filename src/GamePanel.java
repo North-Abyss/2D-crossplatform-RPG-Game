@@ -9,7 +9,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
     private final Player player;
     private final GameMap gameMap;
     private final TileSetting tileSetting;
-
+    HitboxData hitboxData = new HitboxData();
     private static final int TILE_SIZE = Value.TileSize;
     private static final int NUM_TILES_X = Value.NumTilex;
     private static final int NUM_TILES_Y = Value.NumTiley;
@@ -22,7 +22,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
         // Initialize TileSetting and GameMap
         gameMap = new GameMap(tilesheetPaths, backgroundLayerPath, TILE_SIZE * NUM_TILES_X, TILE_SIZE * NUM_TILES_Y);
         tileSetting = new TileSetting(TILE_SIZE * NUM_TILES_X, TILE_SIZE * NUM_TILES_Y);
-        HitboxData hitboxData = new HitboxData();
+
 
         // Initialize player
         player = new Player(TILE_SIZE * 2, TILE_SIZE * 2, tileSetting, hitboxData);
@@ -64,6 +64,9 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 
         // Draw fences on top
         tileSetting.drawFences(g, player.getX(), player.getY());
+
+//        hitboxData.drawPlayerHitbox(g, player.getX(), player.getY());
+//        hitboxData.drawTileHitbox(g, player.getX(), player.getY());
     }
 
     private void drawPlayer(Graphics g) {  player.paint(g); }

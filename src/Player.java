@@ -125,30 +125,33 @@ public class Player {
         boolean newUpPressed = upPressed, newDownPressed = downPressed;
         boolean newLeftPressed = leftPressed, newRightPressed = rightPressed;
 
+        // Check key presses
         if (keyCode == KeyEvent.VK_SPACE) spacePressed = true;
         if (keyCode == KeyEvent.VK_UP) newUpPressed = true;
         if (keyCode == KeyEvent.VK_DOWN) newDownPressed = true;
         if (keyCode == KeyEvent.VK_LEFT) newLeftPressed = true;
         if (keyCode == KeyEvent.VK_RIGHT) newRightPressed = true;
 
+        // Disable movement if pressing opposite directions simultaneously
         if (newUpPressed == newDownPressed) newUpPressed = newDownPressed = false;
         if (newLeftPressed == newRightPressed) newLeftPressed = newRightPressed = false;
 
         // Temporary position variables for collision and boundary checking
         int newX = x;
         int newY = y;
+        int dx = x;
+        int dy = y;
 
         // Update temporary position based on key presses
-        if (newUpPressed)    { newY -= moveAmount; pd = 1; }
-        if (newDownPressed)  { newY += moveAmount; pd = 2; }
-        if (newLeftPressed)  { newX -= moveAmount; pd = 3; }
-        if (newRightPressed) { newX += moveAmount; pd = 4; }
+        if (newUpPressed)    { dy -= moveAmount; newY -= 16; pd = 1; }
+        if (newDownPressed)  { dy += moveAmount; newY += 16; pd = 2; }
+        if (newLeftPressed)  { dx -= moveAmount; newX -= 16; pd = 3; }
+        if (newRightPressed) { dx += moveAmount; newX += 16; pd = 4; }
 
-        // Prepare the position array [newX, newY]
-        int[] position = { newX, newY };
+        // Prepare position array [dx, dy, newX, newY] with consistent hitbox size
+        int[] position = { dx, dy , newX , newY };
 
-        // Use the normal hitbox size for the player
-        int playerHitboxSize = 48; // The size of the player's hitbox (48x48)
+        int playerHitboxSize = 48; // Consistent player hitbox size
 
         // Update player hitbox based on temporary position
         hitboxData.update(newX, newX + playerHitboxSize, newY, newY + playerHitboxSize);
@@ -156,10 +159,9 @@ public class Player {
         // Check for collisions
         boolean canMove = tileSetting.isCollidable(position, pd, hitboxData);
         if (canMove) {
-            // If there is no collision, update the actual player position
             x = position[0];
             y = position[1];
-        }
+        } // Update actual player position if no collision
 
         isMoving = newUpPressed || newDownPressed || newLeftPressed || newRightPressed;
         isRunning = spacePressed;

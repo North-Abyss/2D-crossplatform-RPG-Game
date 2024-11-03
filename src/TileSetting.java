@@ -177,8 +177,8 @@ public class TileSetting {
     }
 
     public boolean isCollidable(int[] position, byte pd, HitboxData hitboxData) {
-        int x = position[0];
-        int y = position[1];
+        int x = position[2];
+        int y = position[3];
         int playerSize = 48;  // Assuming player is 48x48
         int tileSize = TILE_SIZE; // Tile size in your game
 
@@ -237,11 +237,6 @@ public class TileSetting {
         }
 
         // Update player position only if no collision
-        if (!collisionDetected) {
-            position[0] = x;
-            position[1] = y;
-        }
-
         return !collisionDetected;
     }
 

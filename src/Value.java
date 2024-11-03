@@ -30,7 +30,7 @@ public class Value {
     // Resource strings for image paths
     static final String BACKGROUND_IMAGE_PATH = "/Menu/bgmainmenu.jpg";
     static final String BUTTON_IMAGE_PATH = "/Menu/Button.png";
-
+    static final String GameName = "Abyss";
     static int[] anitile ={12};
     public static int waterID =12;
 
