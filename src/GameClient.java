@@ -2,11 +2,13 @@ import java.io.*;
 import java.net.*;
 
 public class GameClient {
+
     private Socket socket;
     private BufferedReader in;
     private PrintWriter out;
 
     public GameClient(String serverAddress, int port) {
+
         try {
             socket = new Socket(serverAddress, port);
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -27,6 +29,7 @@ public class GameClient {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
     }
 
     public void sendPosition(String position) {
@@ -35,8 +38,8 @@ public class GameClient {
 
     public static void main(String[] args) {
         GameClient client = new GameClient("your_server_ip", 12345);
-
         // Example of sending position data
         client.sendPosition("Player1: x=10, y=20");
     }
+
 }

@@ -10,7 +10,7 @@ public class Value {
     public static int waterFrameDurationMs=800;
 
     public static final int WALK_SPEED = 2 ; // Slow walking speed (to match tile movement)
-    public static final int RUN_SPEED = 8 ; // Faster running speed
+    public static final int RUN_SPEED = 13; // Faster running speed
     public static final int IDLE_ANIMATION_SPEED  = 20 ; // Animation speed for idle (higher = slower)
     public static final int WALKING_ANIMATION_SPEED = 10 ; // Animation speed for walking
     public static final int RUNNING_ANIMATION_SPEED = 8 ;// Animation speed for running (higher = faster)
@@ -30,7 +30,7 @@ public class Value {
     // Resource strings for image paths
     static final String BACKGROUND_IMAGE_PATH = "/Menu/bgmainmenu.jpg";
     static final String BUTTON_IMAGE_PATH = "/Menu/Button.png";
-    static final String GameName = "Abyss";
+    static final String GameName ="Abyss";
     static int[] anitile ={12};
     public static int waterID =12;
 

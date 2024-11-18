@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.net.URL;
 
 public class MainMenu extends JFrame {
+
     private static final int BUTTON_WIDTH = 240; // Button width
     private static final int BUTTON_HEIGHT = 80; // Button height
 
